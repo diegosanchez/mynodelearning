@@ -1,0 +1,15 @@
+{
+  "name" : "MyNodeLearning",
+  "version" : "1.0.0",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "tap":"*"
+  },
+  "scripts": {
+    "test": "tap ./tests"
+  }
+}
