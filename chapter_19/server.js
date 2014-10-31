@@ -17,8 +17,6 @@ function handler(req, res) {
   req.on( 'end', function() {
     var number = parseInt(body.trim() );
     var result = JSON.stringify( Math.pow(number, 2) ) ;
-
-    console.log( Date.now(), " - ", result );
     res.end( result );
   });
 }
