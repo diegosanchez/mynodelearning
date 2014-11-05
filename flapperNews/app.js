@@ -16,7 +16,13 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
   $urlRouterProvider.otherwise('home');
 }]);
 
-app.controller( 'PostCtrl', ['$scope', 'posts', function ( $scope, posts ) {
+app.controller( 'PostCtrl', ['$scope', '$stateParams', 'posts', function ( $scope, $stateParams, posts ) {
+
+  var post = posts.find( $stateParams.id );
+
+  $scope.post = post;
+
+
 }]);
 
 app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
@@ -39,6 +45,9 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
   // Create initial data
   posts.addPost( 'new post',  'http://www.fi.uba.ar' );
   posts.addPost( 'untref',    'http://www.untref.gov.ar' );
+
+  posts.comment( posts.all[0], "This is my comment" );
+  posts.comment( posts.all[0], "This is another comment" );
 
   $scope.clearPostForm();
 
