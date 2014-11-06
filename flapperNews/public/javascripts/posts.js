@@ -9,18 +9,10 @@ Post.prototype.addComment = function (author, body) {
   this.comments.push( { author: author, body: body, upvotes: 0 });
 }
 
-app.factory('posts', [ function () {
+app.factory('posts', [ '$http', function ($http) {
   var service = {};
 
-  service.all= [];
-  service.id = 0;
-
-  service.addPost = function ( title, link) {
-    var newPost = new Post( title, link );
-    newPost.id = ++service.id;
-    service.all.push( newPost );
-    return newPost;
-  };
+  service.all = [];
 
   service.upVotes = function (post) {
     post.upvotes += 1;
@@ -35,6 +27,14 @@ app.factory('posts', [ function () {
     console.log( result[0] );
     return result[0];
   }
+
+  $http.get('/posts').
+    success( function(data, status, headers, config) {
+      service.all = angular.fromJson(data);
+    }).
+    error( function(data, status, headers, config) {
+      console.error(status);
+    });
 
   return service;
 }]);

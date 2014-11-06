@@ -58,11 +58,11 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
   var newPost = null;
 
   // Create initial data
-  newPost = posts.addPost( 'new post',  'http://www.fi.uba.ar' );
-  newPost.addComment( 'diego', 'Muy bueno');
-  newPost.addComment( 'juan', 'Malo' );
+  // newPost = posts.addPost( 'new post',  'http://www.fi.uba.ar' );
+  // newPost.addComment( 'diego', 'Muy bueno');
+  // newPost.addComment( 'juan', 'Malo' );
 
-  posts.addPost( 'untref',    'http://www.untref.gov.ar' );
+  // posts.addPost( 'untref',    'http://www.untref.gov.ar' );
 
   $scope.clearPostForm();
 
