@@ -4,12 +4,12 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
   $stateProvider
     .state('home', {
       url: '/home',
-      templateUrl: 'home.html',
+      templateUrl: 'partials/home.html',
       controller: 'MainCtrl'
     })
     .state('posts', {
       url: '/posts/{id}',
-      templateUrl: 'posts.html',
+      templateUrl: 'partials/posts.html',
       controller: 'PostCtrl'
     });
 
@@ -18,10 +18,18 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
 
 app.controller( 'PostCtrl', ['$scope', '$stateParams', 'posts', function ( $scope, $stateParams, posts ) {
 
-  var post = posts.find( $stateParams.id );
+  var post = posts.findById( $stateParams.id );
 
   $scope.post = post;
 
+  $scope.upVotes = function (comment) {
+    console.log( 'PostCtrl', 'upVotes' );
+    comment.upvotes += 1;
+  }
+
+  $scope.addComment = function () {
+    $scope.post.addComment( 'yo', $scope.body );
+  }
 
 }]);
 
@@ -37,17 +45,24 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
   };
 
   $scope.upVotes = function (post) {
+    console.log( 'MainCtrl', 'upVotes' );
     posts.upVotes(post);
   }
 
   $scope.posts = posts.all;
 
-  // Create initial data
-  posts.addPost( 'new post',  'http://www.fi.uba.ar' );
-  posts.addPost( 'untref',    'http://www.untref.gov.ar' );
+  if ( posts.all.length != 0 )
+    return;
 
-  posts.comment( posts.all[0], "This is my comment" );
-  posts.comment( posts.all[0], "This is another comment" );
+
+  var newPost = null;
+
+  // Create initial data
+  newPost = posts.addPost( 'new post',  'http://www.fi.uba.ar' );
+  newPost.addComment( 'diego', 'Muy bueno');
+  newPost.addComment( 'juan', 'Malo' );
+
+  posts.addPost( 'untref',    'http://www.untref.gov.ar' );
 
   $scope.clearPostForm();
 
