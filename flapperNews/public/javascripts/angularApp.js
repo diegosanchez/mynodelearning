@@ -3,6 +3,11 @@ app = angular.module( 'flapperNews', ['ui.router'] );
 app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
+      resolve: {
+          postPromise: ['posts', function(posts) {
+            return posts.getAll();
+          }]
+      },
       url: '/home',
       templateUrl: 'partials/home.html',
       controller: 'MainCtrl'
@@ -28,9 +33,11 @@ app.controller( 'PostCtrl', ['$scope', '$stateParams', 'posts', function ( $scop
   }
 
   $scope.addComment = function () {
-    $scope.post.addComment( 'yo', $scope.body );
-  }
-
+    return $http.post( '/posts/' + post._id + '/comments', $scopte).
+      success( function(data) {
+        $scope.post.addComment( angular.fromJson(data));
+      });
+  };
 }]);
 
 app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
@@ -40,12 +47,11 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
   };
 
   $scope.addPost = function () {
-    posts.addPost( $scope.title, $scope.link);
+    posts.add( $scope );
     $scope.clearPostForm();
   };
 
   $scope.upVotes = function (post) {
-    console.log( 'MainCtrl', 'upVotes' );
     posts.upVotes(post);
   }
 
@@ -57,12 +63,6 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
 
   var newPost = null;
 
-  // Create initial data
-  // newPost = posts.addPost( 'new post',  'http://www.fi.uba.ar' );
-  // newPost.addComment( 'diego', 'Muy bueno');
-  // newPost.addComment( 'juan', 'Malo' );
-
-  // posts.addPost( 'untref',    'http://www.untref.gov.ar' );
 
   $scope.clearPostForm();
 

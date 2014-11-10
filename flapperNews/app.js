@@ -11,7 +11,9 @@ mongoose.connect('mongodb://localhost/news');
 require('./models/Post');
 require('./models/Comment');
 
-var routes = require('./routes/index');
+var index = require('./routes/index');
+var posts = require('./routes/posts');
+var comments = require('./routes/comments');
 
 var app = express();
 
@@ -27,7 +29,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use('/', index);
+app.use(posts);
+app.use(comments);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -59,6 +63,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
