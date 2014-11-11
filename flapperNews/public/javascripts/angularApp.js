@@ -13,6 +13,13 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
       controller: 'MainCtrl'
     })
     .state('posts', {
+      resolve: {
+        post: ['$stateParams', 'posts', function ($stateParams, posts) {
+          return posts.get($stateParams.id).then( function(response) {
+            return response.data;
+          });
+        }]
+      },
       url: '/posts/{id}',
       templateUrl: 'partials/posts.html',
       controller: 'PostCtrl'
@@ -21,14 +28,12 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
   $urlRouterProvider.otherwise('home');
 }]);
 
-app.controller( 'PostCtrl', ['$scope', '$stateParams', 'posts', function ( $scope, $stateParams, posts ) {
+app.controller( 'PostCtrl', ['$scope', 'post', function ( $scope, post ) {
 
-  var post = posts.findById( $stateParams.id );
-
+  console.log("PostCtrl: ", post);
   $scope.post = post;
 
   $scope.upVotes = function (comment) {
-    console.log( 'PostCtrl', 'upVotes' );
     comment.upvotes += 1;
   }
 
@@ -38,32 +43,27 @@ app.controller( 'PostCtrl', ['$scope', '$stateParams', 'posts', function ( $scop
         $scope.post.addComment( angular.fromJson(data));
       });
   };
+
 }]);
 
 app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
+  $scope.posts = posts.all;
+
   $scope.clearPostForm = function () {
-    $scope.title = '';
-    $scope.link = '';
+    $scope.post = {};
   };
 
   $scope.addPost = function () {
-    posts.add( $scope );
-    $scope.clearPostForm();
+    posts.add( $scope.post );
   };
 
   $scope.upVotes = function (post) {
     posts.upVotes(post);
   }
 
-  $scope.posts = posts.all;
-
-  if ( posts.all.length != 0 )
-    return;
-
-
-  var newPost = null;
-
+  $scope.isSubmitEnabled = function() {
+    return $scope.post.title == "" || $scope.post.link == "";
+  }
 
   $scope.clearPostForm();
-
 }]);
