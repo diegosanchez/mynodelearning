@@ -28,19 +28,22 @@ app.config( ['$stateProvider', '$urlRouterProvider', function($stateProvider, $u
   $urlRouterProvider.otherwise('home');
 }]);
 
-app.controller( 'PostCtrl', ['$scope', 'post', function ( $scope, post ) {
+app.controller( 'PostCtrl', ['$scope', '$http', 'post', function ( $scope, $http, post ) {
 
   console.log("PostCtrl: ", post);
   $scope.post = post;
 
   $scope.upVotes = function (comment) {
-    comment.upvotes += 1;
+    var url = '/posts/' + comment.post + '/comments/' + comment._id + '/upvote';
+    return $http.put( url).success( function( response) {
+      comment.upvotes = Number(response.upvotes);
+    });
   }
 
   $scope.addComment = function () {
-    return $http.post( '/posts/' + post._id + '/comments', $scopte).
+    return $http.post( '/posts/' + post._id + '/comments', $scope.comment).
       success( function(data) {
-        $scope.post.addComment( angular.fromJson(data));
+        $scope.post.comments.push( angular.fromJson(data));
       });
   };
 
