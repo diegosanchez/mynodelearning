@@ -1,15 +1,3 @@
-function Post(data) {
-  angular.copy(data, this);
-}
-
-
-Post.prototype.addComment = function (author, body) {
-  this.comments.push( { author: author, body: body, upvotes: 0 });
-};
-
-Post.prototype.id = function() {
-  return this.id;
-}
 
 app.factory('posts', [ '$http', function ($http) {
   var service = { all: [] };
@@ -22,10 +10,8 @@ app.factory('posts', [ '$http', function ($http) {
 
   service.findById = function (id) {
     var result = service.all.filter( function ( e ) {
-      return e.id == id;
+      return e._id == id;
     });
-
-    console.log(result[0]);
 
     return result[0];
   }
@@ -35,9 +21,7 @@ app.factory('posts', [ '$http', function ($http) {
     var self = this;
 
     promise.success( function(data, status, headers, config) {
-      angular.forEach( angular.fromJson(data), function( e ) {
-        self.all.push( new Post(e) );
-      });
+      self.all = data;
     });
 
     return promise;
@@ -49,10 +33,14 @@ app.factory('posts', [ '$http', function ($http) {
     var self = this;
     
     promise.success( function (data) {
-      self.all.push( new Post(data) );
+      self.all.push( data );
     });
 
     return promise;
+  };
+
+  service.get = function(id) {
+    return $http.get('/posts/' + id );
   }
 
   return service;
