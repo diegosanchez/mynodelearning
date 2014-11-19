@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test":"node node_modules/karma/bin/karma start"
+    "test":"node node_modules/karma/bin/karma start",
+		"postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
     "express": "~4.9.0",
