@@ -62,11 +62,11 @@ app.controller( 'MainCtrl', ['$scope', 'posts', function ( $scope, posts ) {
 
   $scope.upVotes = function (post) {
     posts.upVotes(post);
-  }
+  };
 
   $scope.isSubmitEnabled = function() {
-    return $scope.post.title == "" || $scope.post.link == "";
-  }
+    return ($scope.post.title || "") !== "" && ($scope.post.link || "") !== "";
+  };
 
   $scope.clearPostForm();
 }]);

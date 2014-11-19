@@ -1,16 +1,16 @@
 {
-  "name" : "MyNodeLearning",
-  "version" : "1.0.0",
+  "name": "MyNodeLearning",
+  "version": "1.0.0",
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "tap":"*",
-    "connect":"*",
-    "async":"*",
-    "request":"*"
+    "tap": "*",
+    "connect": "*",
+    "async": "*",
+    "request": "*",
+    "karma": "~0.12.25"
   },
   "scripts": {
     "test": "tap ./tests"
