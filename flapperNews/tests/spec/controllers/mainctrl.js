@@ -1,5 +1,15 @@
 describe('Unit: MainCtrl', function() {
 	beforeEach( module('flapperNews'));
+	beforeEach( module( function( $provide ) {
+		$provide.factory( 'posts', function () {
+			return {
+				all: [],
+				add: function (post) {
+					this.all.push(post);
+				}
+			}
+		})
+	}));
 
 	var ctrl, scope;
 
@@ -24,5 +34,13 @@ describe('Unit: MainCtrl', function() {
 		scope.post.title = 'My title';
 		scope.post.link = 'http://mylink.com';
 		expect(scope.isSubmitEnabled()).toBe(true);
+	});
+
+	it('should add post', function() {
+		scope.post.title = 'my title';
+		scope.post.link = 'http://mytitle.com';
+		scope.addPost();
+		expect(scope.posts.length).toBeGreaterThan(0);
+		
 	});
 });
